@@ -1,0 +1,7 @@
+ve/ 
+pycache/ 
+migrations/
+*.pyc 
+.env 
+*.log
+new.txt

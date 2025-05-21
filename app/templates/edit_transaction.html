@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Редактирование транзакции{% endblock %}
+{% block content %}
+    <h2>Редактирование транзакции</h2>
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.date.label }} {{ form.date(class="form-control") }}
+        {{ form.type.label }} {{ form.type(class="form-control") }}
+        {{ form.account.label }} {{ form.account(class="form-control") }}
+        {{ form.category.label }} {{ form.category(class="form-control") }}
+        {{ form.amount.label }} {{ form.amount(class="form-control") }}
+        {{ form.description.label }} {{ form.description(class="form-control") }}
+        <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+    </form>
+{% endblock %}

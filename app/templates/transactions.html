@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Транзакции{% endblock %}
+{% block content %}
+    <h2>Мои транзакции</h2>
+    <form method="GET" class="mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <select name="type" class="form-control">
+                    <option value="Все типы">Все типы</option>
+                    <option value="Доход">Доход</option>
+                    <option value="Расход">Расход</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="category" class="form-control">
+                    <option value="Все категории">Все категории</option>
+                    {% for category in categories %}
+                        <option value="{{ category.name }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="date" class="form-control">
+                    <option value="Все время">Все время</option>
+                    <option value="Неделя">Неделя</option>
+                    <option value="Месяц">Месяц</option>
+                    <option value="Год">Год</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Фильтровать</button>
+            </div>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Категория</th>
+                <th>Сумма</th>
+                <th>Описание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transactions %}
+                <tr>
+                    <td>{{ t.date.strftime('%d.%m.%Y') }}</td>
+                    <td>{{ t.category.name }}</td>
+                    <td>{{ '+' if t.type == 'Доход' else '-' }}{{ t.amount }}₽</td>
+                    <td>{{ t.description }}</td>
+                    <td>
+                        <a href="{{ url_for('main.edit_transaction', id=t.id) }}" class="btn btn-sm btn-warning">✎</a>
+                        <form action="{{ url_for('main.delete_transaction', id=t.id) }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> <!-- Добавлено -->
+                            <button type="submit" class="btn btn-sm btn-danger">×</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

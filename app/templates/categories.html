@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Категории{% endblock %}
+{% block content %}
+    <h2>Управление категориями</h2>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#addCategoryModal" class="btn btn-primary mb-3">+ Добавить категорию</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Тип</th>
+                <th>Использований</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td>{{ category.type }}</td>
+                    <td>{{ Transaction.query.filter_by(category_id=category.id).count() }}</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editCategoryModal{{ category.id }}">✎ Редактировать</a>
+                        <form action="{{ url_for('delete_category', id=category.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" {% if category.is_system %}disabled{% endif %}>× Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+                <div class="modal fade" id="editCategoryModal{{ category.id }}" tabindex="-1" aria-labelledby="editCategoryModalLabel{{ category.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editCategoryModalLabel{{ category.id }}">Редактирование категории</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST">
+                                    {{ form.hidden_tag() }}
+                                    <div class="mb-3">
+                                        {{ form.name.label }} {{ form.name(class="form-control", value=category.name) }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.type.label }} {{ form.type(class="form-control", value=category.type) }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.is_system.label }} {{ form.is_system(class="form-check-input", checked=category.is_system) }}
+                                    </div>
+                                    {{ form.submit(class="btn btn-primary", value="Сохранить изменения") }}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">Новая категория</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('categories') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.name.label }} {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.type.label }} {{ form.type(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.is_system.label }} {{ form.is_system(class="form-check-input") }}
+                        </div>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

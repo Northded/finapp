@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Аналитика{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Аналитика</h2>
+            <a href="{{ url_for('main.export_analytics') }}" 
+               class="btn btn-success" 
+               title="Выгрузить все данные в CSV"
+               data-bs-toggle="tooltip">
+                <i class="bi bi-filetype-csv"></i> Экспорт данных
+            </a>
+        </div>
+
+        {% if has_data %}
+            <script type="application/json" id="expenseData">{{ category_data|tojson }}</script>
+            <script type="application/json" id="incomeData">{{ income_data|tojson }}</script>
+
+            <div class="row mb-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Расходы по категориям</h4>
+                            {% if category_data %}
+                                <div style="position: relative; height: 300px;">
+                                    <canvas id="expenseChart"></canvas>
+                                </div>
+                            {% else %}
+                                <p class="text-muted mt-3">Нет данных о расходах за последние 30 дней</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Доходы по категориям</h4>
+                            {% if income_data %}
+                                <div style="position: relative; height: 300px;">
+                                    <canvas id="incomeChart"></canvas>
+                                </div>
+                            {% else %}
+                                <p class="text-muted mt-3">Нет данных о доходах за последние 30 дней</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-3">Бюджеты</h4>
+                            {% if budget_status %}
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Категория</th>
+                                            <th>Лимит</th>
+                                            <th>Потрачено</th>
+                                            <th>Остаток</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for b in budget_status %}
+                                            <tr>
+                                                <td>{{ b.category }}</td>
+                                                <td>{{ "%.2f"|format(b.limit|float) }}₽</td>
+                                                <td>{{ "%.2f"|format(b.spent|float) }}₽</td>
+                                                <td class="{{ 'text-success' if b.remaining >= 0 else 'text-danger' }}">
+                                                    {{ "%.2f"|format(b.remaining|float) }}₽
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p class="text-muted">Нет активных бюджетов</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title">Счета</h4>
+                            {% if accounts %}
+                                <ul class="list-group">
+                                    {% for account in accounts %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ account.name }}
+                                            <span class="badge bg-primary rounded-pill">
+                                                {{ account.balance }} {{ account.currency }}
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">Нет активных счетов</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Цели</h4>
+                            {% if goals %}
+                                <div class="list-group">
+                                    {% for goal in goals %}
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <strong>{{ goal.name }}</strong>
+                                                <span>{{ (goal.current_progress / goal.target_amount * 100)|round(2) }}%</span>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar" 
+                                                    role="progressbar" 
+                                                    style="width: {{ (goal.current_progress / goal.target_amount * 100)|round(2) }}%">
+                                                </div>
+                                            </div>
+                                            <small class="text-muted d-block mt-1">
+                                                {{ "%.2f"|format(goal.current_progress|float) }} / 
+                                                {{ "%.2f"|format(goal.target_amount|float) }}₽
+                                            </small>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-muted">Нет активных целей</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <div class="alert alert-info text-center">
+                <h4 class="alert-heading">📊 Нет данных для анализа</h4>
+                <hr>
+                <p class="mb-0">
+                    Начните добавлять транзакции, счета и цели, чтобы увидеть статистику.<br>
+                    <a href="{{ url_for('main.add_transaction') }}" class="btn btn-primary mt-3">
+                        Добавить первую транзакцию
+                    </a>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if has_data %}
+        <script src="{{ url_for('static', filename='js/analytics-charts.js') }}"></script>
+    {% endif %}
+{% endblock %}

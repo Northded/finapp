@@ -1,0 +1,10 @@
+flask 
+flask-login 
+flask-wtf 
+flask-sqlalchemy 
+psycopg2-binary 
+werkzeug 
+pandas 
+openpyxl 
+python-dotenv
+python-dateutil

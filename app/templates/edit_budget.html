@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Редактирование бюджета</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.new_category.label(class="form-label") }}
+            {{ form.new_category(class="form-control", readonly="readonly") }}
+            <small class="text-muted">Категорию нельзя изменить после создания</small>
+        </div>
+
+        <!-- Поле лимита -->
+        <div class="mb-3">
+            {{ form.limit_amount.label(class="form-label") }}
+            {{ form.limit_amount(class="form-control") }}
+        </div>
+
+        <!-- Период и дата -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.period.label(class="form-label") }}
+                {{ form.period(class="form-select") }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.start_date.label(class="form-label") }}
+                {{ form.start_date(class="form-control") }}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

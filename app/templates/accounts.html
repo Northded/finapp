@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Счета{% endblock %}
+{% block content %}
+    <h2>Мои счета</h2>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#addAccountModal" class="btn btn-primary mb-3">+ Новый счет</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Баланс</th>
+                <th>Валюта</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for account in accounts %}
+                <tr>
+                    <td>{{ account.name }}</td>
+                    <td>{{ account.balance }}</td>
+                    <td>{{ account.currency }}</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-warning">✎</a>
+                        <form action="{{ url_for('main.delete_account', id=account.id) }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-sm btn-danger">×</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAccountModalLabel">Новый счет</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('main.accounts') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.name.label }} {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.currency.label }} {{ form.currency(class="form-control") }}
+                        </div>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Админ-панель{% endblock %}
+{% block content %}
+    <h2>Управление пользователями</h2>
+    <div class="mb-4">
+        <a href="{{ url_for('main.admin_export_csv') }}" 
+        class="btn btn-success">
+           Экспорт в CSV
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Имя</th>
+                    <th>Email</th>
+                    <th>Роль</th>
+                    <th>Транзакций</th>
+                    <th>Счетов</th>
+                    <th>Целей</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in stats %}
+                <tr>
+                    <td>{{ stat.user.id }}</td>
+                    <td>{{ stat.user.name }}</td>
+                    <td>{{ stat.user.email }}</td>
+                    <td>{{ stat.user.role }}</td>
+                    <td>{{ stat.transactions }}</td>
+                    <td>{{ stat.accounts }}</td>
+                    <td>{{ stat.goals }}</td>
+                    <td>
+                        <a href="{{ url_for('main.admin_edit_user', id=stat.user.id) }}" 
+                           class="btn btn-sm btn-warning">✎</a>
+                        <form action="{{ url_for('main.admin_delete_user', id=stat.user.id) }}" 
+                              method="POST" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-sm btn-danger">🗑</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

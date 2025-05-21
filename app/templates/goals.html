@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}Цели{% endblock %}
+{% block content %}
+    <h2>Мои цели</h2>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#addGoalModal" class="btn btn-primary mb-3">+ Новая цель</a>
+    <div class="row">
+        {% for goal in goals %}
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ goal.name }}</h5>
+                        <div class="dropdown float-end">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">⋮</button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addProgressModal{{ goal.id }}">Пополнить</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editGoalModal{{ goal.id }}">Редактировать</a></li>
+                                <li>
+                                    <form action="{{ url_for('main.delete_goal', id=goal.id) }}" method="POST" style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" class="dropdown-item">Удалить</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ (goal.current_progress / goal.target_amount * 100)|round(2) }}%" 
+                                 aria-valuenow="{{ (goal.current_progress / goal.target_amount * 100)|round(2) }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                {{ (goal.current_progress / goal.target_amount * 100)|round(2) }}%
+                            </div>
+                        </div>
+                        <p class="mt-2">
+                            Накоплено: {{ "%.2f"|format(goal.current_progress|float) }}₽<br>
+                            Цель: {{ "%.2f"|format(goal.target_amount|float) }}₽<br>
+                            Срок: {{ goal.deadline.strftime('%d.%m.%Y') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addProgressModal{{ goal.id }}" tabindex="-1" aria-labelledby="addProgressModalLabel{{ goal.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addProgressModalLabel{{ goal.id }}">Пополнить цель: {{ goal.name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="{{ url_for('main.add_goal_progress', id=goal.id) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <div class="mb-3">
+                                    <label class="form-label">Счет для списания</label>
+                                    <select class="form-select" name="account" required>
+                                        {% for account in current_user.accounts %}
+                                            <option value="{{ account.id }}">{{ account.name }} ({{ account.balance }}₽)</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Сумма (₽)</label>
+                                    <input 
+                                        type="number" 
+                                        step="0.01" 
+                                        class="form-control" 
+                                        name="amount" 
+                                        required
+                                        min="0.01"
+                                        placeholder="0.00"
+                                    >
+                                </div>
+                                <button type="submit" class="btn btn-primary">Добавить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальное окно редактирования -->
+            <div class="modal fade" id="editGoalModal{{ goal.id }}" tabindex="-1" aria-labelledby="editGoalModalLabel{{ goal.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Редактирование: {{ goal.name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="{{ url_for('main.edit_goal', id=goal.id) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <div class="mb-3">
+                                    <label class="form-label">Название</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        name="name" 
+                                        value="{{ goal.name }}" 
+                                        required
+                                    >
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Целевая сумма</label>
+                                    <input 
+                                        type="number" 
+                                        class="form-control" 
+                                        name="target_amount" 
+                                        value="{{ goal.target_amount }}" 
+                                        step="0.01" 
+                                        min="0.01" 
+                                        required
+                                    >
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Срок</label>
+                                    <input 
+                                        type="date" 
+                                        class="form-control" 
+                                        name="deadline" 
+                                        value="{{ goal.deadline.strftime('%Y-%m-%d') }}" 
+                                        required
+                                    >
+                                </div>
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Модальное окно создания цели -->
+    <div class="modal fade" id="addGoalModal" tabindex="-1" aria-labelledby="addGoalModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addGoalModalLabel">Новая цель</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('main.goals') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.target_amount.label(class="form-label") }}
+                            {{ form.target_amount(class="form-control", step="0.01", min="0.01") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.deadline.label(class="form-label") }}
+                            {{ form.deadline(class="form-control") }}
+                        </div>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
