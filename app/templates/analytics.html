@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive/analytics.css') }}">
+{% endblock %}
 {% block title %}Аналитика{% endblock %}
 {% block content %}
 

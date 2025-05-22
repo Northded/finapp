@@ -1,0 +1,32 @@
+@media (max-width: 768px) {
+    .accounts-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .accounts-table td[data-label]::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 600;
+        width: 45%;
+        color: #6c757d;
+        padding-right: 1rem;
+    }
+    
+    .account-actions {
+        flex-direction: column !important;
+        gap: 0.5rem;
+    }
+    
+    #addAccountModal .modal-dialog {
+        margin: 0.5rem;
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 576px) {
+    .account-actions .btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,25 @@
+@media (max-width: 768px) {
+    .transaction-form .form-control {
+        font-size: 16px;
+        padding: 12px 15px;
+    }
+    
+    .transaction-form .btn-group {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    #newCategoryField {
+        margin-top: 1.25rem;
+    }
+    
+    .form-select {
+        background-position: right 12px center;
+    }
+}
+
+@media (max-width: 400px) {
+    .transaction-form .form-label {
+        font-size: 0.9rem;
+    }
+}

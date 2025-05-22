@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive/accounts.css') }}">
+{% endblock %}
 {% block title %}Счета{% endblock %}
 {% block content %}
     <h2>Мои счета</h2>

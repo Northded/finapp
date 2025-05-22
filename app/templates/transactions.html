@@ -1,4 +1,7 @@
-{% extends "base.html" %}
+{% extends "base.html" %}\
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive/transactions.css') }}">
+{% endblock %}
 {% block title %}Транзакции{% endblock %}
 {% block content %}
     <h2>Мои транзакции</h2>

@@ -1,0 +1,32 @@
+/* static/css/responsive/index.css */
+@media (max-width: 1200px) {
+    .balance-card {
+        order: -1;
+        margin-bottom: 2rem;
+    }
+    
+    .chart-container {
+        height: 250px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .transaction-item {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .transaction-badge {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .chart-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .balance-display {
+        font-size: 2rem !important;
+    }
+}

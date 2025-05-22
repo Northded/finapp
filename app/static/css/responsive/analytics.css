@@ -1,0 +1,24 @@
+@media (max-width: 1200px) {
+    .analytics-row {
+        flex-direction: column;
+    }
+    
+    .chart-container {
+        height: 280px !important;
+    }
+    
+    .budget-status-table {
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 768px) {
+    .progress-bar-labels {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .goal-progress {
+        flex-direction: column;
+    }
+}

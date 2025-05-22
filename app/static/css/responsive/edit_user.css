@@ -1,0 +1,17 @@
+/* static/css/responsive/edit_user.css */
+@media (max-width: 768px) {
+    .user-edit-form .form-control {
+        font-size: 16px;
+        padding: 12px 15px;
+    }
+    
+    .user-edit-form .form-label {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .user-edit-form .btn {
+        width: 100%;
+    }
+}

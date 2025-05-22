@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive/register.css') }}">
+{% endblock %}
 {% block title %}Регистрация{% endblock %}
 {% block content %}
     <div class="row justify-content-center">

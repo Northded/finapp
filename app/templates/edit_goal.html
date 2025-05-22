@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive/edit_goal.css') }}">
+{% endblock %}
 {% block title %}Редактирование цели{% endblock %}
 {% block content %}
     <div class="container mt-4">

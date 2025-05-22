@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive/index.css') }}">
+{% endblock %}
 {% block title %}Главная{% endblock %}
 {% block content %}
     <h2>Привет, {{ current_user.name }}!</h2>

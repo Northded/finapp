@@ -1,0 +1,16 @@
+@media (max-width: 768px) {
+    .goal-edit-form .form-control {
+        font-size: 16px;
+        padding: 12px 15px;
+    }
+    
+    .goal-edit-form .form-label {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .goal-edit-form .btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,17 @@
+@media (max-width: 768px) {
+    .transaction-edit-form .form-group {
+        margin-bottom: 1.25rem;
+    }
+    
+    .transaction-edit-form .form-control {
+        font-size: 16px;
+        padding: 12px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .transaction-edit-form .btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}
