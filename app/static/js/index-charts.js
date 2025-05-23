@@ -19,11 +19,20 @@ function initializeCharts() {
         }
     };
 
-    const expenseData = JSON.parse(document.getElementById('expenseData').textContent);
-    const incomeData = JSON.parse(document.getElementById('incomeData').textContent);
+    // Получение данных
+    const expenseDataElement = document.getElementById('expenseData');
+    const incomeDataElement = document.getElementById('incomeData');
+
+    const expenseData = expenseDataElement 
+        ? JSON.parse(expenseDataElement.textContent)
+        : null;
+
+    const incomeData = incomeDataElement 
+        ? JSON.parse(incomeDataElement.textContent)
+        : null;
 
     // Инициализация графиков
-    if(expenseData && expenseData.labels.length > 0) {
+    if (expenseData?.labels?.length > 0) {
         new Chart(document.getElementById('expenseChart'), {
             type: 'doughnut',
             data: {
@@ -37,7 +46,7 @@ function initializeCharts() {
         });
     }
 
-    if(incomeData && incomeData.labels.length > 0) {
+    if (incomeData?.labels?.length > 0) {
         new Chart(document.getElementById('incomeChart'), {
             type: 'doughnut',
             data: {

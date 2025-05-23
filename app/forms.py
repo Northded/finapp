@@ -86,16 +86,14 @@ class TransactionForm(FlaskForm):
             return False
             
         return True
-
+    
 class AccountForm(FlaskForm):
     name = StringField('Название счета', validators=[
         DataRequired(), 
         Length(max=50)
     ])
     currency = SelectField('Валюта', choices=[
-        ('RUB', 'RUB'), 
-        ('USD', 'USD'), 
-        ('EUR', 'EUR')
+        ('RUB', 'RUB')  
         ], 
     validators=[
         DataRequired()

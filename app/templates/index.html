@@ -21,13 +21,16 @@
 
         <div class="col-md-8">
             <div class="row h-100">
-                {% if expense_labels and income_labels %}
+                {% if expense_labels %}
                     <script type="application/json" id="expenseData">
                         {
                             "labels": {{ expense_labels|tojson }},
                             "values": {{ expense_values|map('float')|list|tojson }}
                         }
                     </script>
+                {% endif %}
+                
+                {% if income_labels %}
                     <script type="application/json" id="incomeData">
                         {
                             "labels": {{ income_labels|tojson }},
@@ -110,7 +113,7 @@
         </div>
     </div>
 
-    {% if expense_labels and income_labels %}
+    {% if expense_labels or income_labels %}
         <script src="{{ url_for('static', filename='js/index-charts.js') }}"></script>
     {% endif %}
 {% endblock %}
